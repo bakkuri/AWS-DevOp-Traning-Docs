@@ -1,0 +1,444 @@
+Tomcat installation on EC2 instance
+Follow this article in YouTube
+Prerequisites
+EC2 instance with Java v1.8.x
+Install Apache Tomcat
+Download tomcat packages from https://tomcat.apache.org/download-80.cgi onto /opt on EC2 instance
+
+  # create tomcat directory
+  cd /opt
+  wget http://mirrors.fibergrid.in/apache/tomcat/tomcat-8/v8.5.35/bin/apache-tomcat-8.5.35.tar.gz
+  tar -xvzf /opt/apache-tomcat-8.5.35.tar.gz
+give executing permissions to startup.sh and shutdown.sh which are under bin.
+
+   chmod +x /opt/apache-tomcat-8.5.35/bin/startup.sh shutdown.sh
+create link files for tomcat startup.sh and shutdown.sh
+
+  ln -s /opt/apache-tomcat-8.5.35/bin/startup.sh /usr/local/bin/tomcatup
+  ln -s /opt/apache-tomcat-8.5.35/bin/shutdown.sh /usr/local/bin/tomcatdown
+  tomcatup
+check point :
+access tomcat application from browser on prot 8080
+http://<Public_IP>:8080
+
+Using unique ports for each application is a best practice in an environment. But tomcat and Jenkins runs on ports number 8080. Hence lets change tomcat port number to 8090. Change port number in conf/server.xml file under tomcat home
+
+cd /opt/apache-tomcat-8.5.35/conf
+# update port number in the "connecter port" field in server.xml
+# restart tomcat after configuration update
+tomcatdown
+tomcatup
+check point :
+access tomcat application from browser on prot 8090
+http://<Public_IP>:8090
+
+now application is accessible on port 8090. but tomcat application doesnt allow to login from browser. changing a default parameter in context.xml does address this issue
+
+#search for context.xml
+find / -name context.xml
+above command gives 3 context.xml files. comment () Value ClassName field on files which are under webapp directory. After that restart tomcat services to effect these changes
+
+tomcatdown
+tomcatup
+Update users information in the tomcat-users.xml file goto tomcat home directory and Add below users to conf/tomcat-user.xml file
+
+	<role rolename="manager-gui"/>
+	<role rolename="manager-script"/>
+	<role rolename="manager-jmx"/>
+	<role rolename="manager-status"/>
+	<user username="admin" password="admin" roles="manager-gui, manager-script, manager-jmx, manager-status"/>
+	<user username="deployer" password="deployer" roles="manager-script"/>
+	<user username="tomcat" password="s3cret" roles="manager-gui"/>
+Restart serivce and try to login to tomcat application from the browser. This time it should be Successful
+
+
+
+
+
+NGINX INSTAllATION
+
+update your system
+ # yum update
+Download Nginx latest version. version we use here is :
+
+download latest version of nginx from http://nginx.org/en/download.html website
+
+ # cd /opt
+ # wget http://nginx.org/download/nginx-1.15.4.tar.gz
+ # tar -zxvf nginx-1.15.4.tar.gz
+ # mv nginx-1.15.4 /opt/nginx 
+In order to compile our source code we need to install dependences.
+  # yum groupinstall "Development Tools"
+  # yum install pcre pcre-devel zlib zlib-devel openssl openssl-devel
+Run /opt/nginx/configure file with below parameters
+	# cd /opt/nginx 
+	# ./configure --sbin-path=/usr/bin/nginx --conf-path=/etc/nginx/nginx.conf  --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-pcre --pid-path=/var/run/nginx.pid --with-http_ssl_module
+Now compile and install nginx
+ # make 
+ # make install 
+Check nginx version and start service to use.
+ # nginx -V
+ # nginx 
+Setup nginx as a system servicecreate a file /lib/systemd/system/nginx.service and copy below URL content into that and modify according to your file path locations.
+Ref URL : https://www.nginx.com/resources/wiki/start/topics/examples/systemd/
+
+# vi /lib/systemd/system/nginx.service
+copy below contant in to nginx.service file by changing PIDFile location
+
+[Unit]
+Description=The NGINX HTTP and reverse proxy server
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/nginx.pid 
+ExecStartPre=/usr/bin/nginx -t  
+ExecStart=/usr/bin/nginx 
+ExecReload=/usr/sbin/nginx -s reload
+ExecStop=/bin/kill -s QUIT $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+Start nginx and test
+# systemctl start nginx
+# systemctl enable nginx
+# ps aux | grep nginx
+
+
+SonarQube Installation
+SonarQube provides the capability to not only show health of an application but also to highlight issues newly introduced. With a Quality Gate in place, you can fix the leak and therefore improve code quality systematically.
+
+Follow this Article in YouTube
+Prerequisites
+EC2 instance with Java installed
+MySQL Database Server or MyQL RDS instance. Get help here
+Installation
+Install MySQL client version
+
+ # yum install mysql
+Download stable SonarQube version from below website.
+
+Website: https://www.sonarqube.org/downloads/
+Note: This Article written for SonarQube6.0
+Download & unzip SonarQube 6.0
+
+# cd /opt
+# wget https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-6.0.zip
+# unzip sonarqube-6.0.zip
+# mv /opt/sonarqube-6.0 /opt/sonar
+Allow RDS instance security group to access SonarQube server
+
+Connect to RDS instance with database credentials
+
+mysql -h <RDS_Instance_endpoint>:3306 -u <DB_USER_NAME> -p <DB_PASSWORD> 
+Create a new sonar database
+
+CREATE DATABASE sonar CHARACTER SET utf8 COLLATE utf8_general_ci;
+Create a local and a remote user
+
+CREATE USER sonar@localhost IDENTIFIED BY 'sonar';
+CREATE USER sonar@'%' IDENTIFIED BY 'sonar';
+Grant database access permissions to users
+
+GRANT ALL ON sonar.* TO sonar@localhost;
+GRANT ALL ON sonar.* TO sonar@'%';
+check users and databases
+
+use mysql
+show databases;
+SELECT User FROM mysql.user;
+FLUSH PRIVILEGES;
+QUIT
+So for you have configured required database information on RDS. Let’s Jump back to your EC2 instance and enable SonarQube properties file to connect his Database.
+
+ON EC2 Instance
+Edit sonar properties file to uncomment and provide required information for below properties.
+
+File Name: /opt/sonar/conf/sonar.properties
+sonar.jdbc.username=sonar
+sonar.jdbc.password=sonar
+sonar.jdbc.url=jdbc:mysql://<RDS_DATABAE_ENDPOINT>:3306/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance&useSSL=false
+sonar.web.host=0.0.0.0
+sonar.web.context=/sonar
+Start SonarQube service
+
+# cd /opt/sonar/bin/linux-x86-64/
+# ./sonar.sh start
+Run SonarQube as a default service
+Implement SonarQube server as a service
+
+Copy sonar.sh to etc/init.d/sonar and modify it according to your platform.
+# sudo cp /opt/sonar/bin/linux-x86-64/sonar.sh /etc/init.d/sonar
+# sudo vi /etc/init.d/sonar
+Add below values to your /etc/init.d/sonar file
+
+Insert/modify below values
+SONAR_HOME=/opt/sonar
+PLATFORM=linux-x86-64
+
+WRAPPER_CMD="${SONAR_HOME}/bin/${PLATFORM}/wrapper"
+WRAPPER_CONF="${SONAR_HOME}/conf/wrapper.conf"
+PIDDIR="/var/run"
+Start SonarQube server
+
+# service sonar start
+SonarQube application uses port 9000. access SonarQube from browser
+
+  http://<EC2_PUBLIC_IP>:9000/sonar
+Troubleshooting
+Check whether you enabled port 9000 in EC2 instance security group
+Check whether you enabled EC2 instance IP range in RDS security group
+Next Step
+ Integrate SonarQube with Jenkins
+ 
+ SonarQube Integration with Jenkins
+Integration SonarQube server with Jenkins is necessary to store your reports. Follow below steps to enable that.
+
+Follow this in YouTube
+Prerequisites
+SonarQube Server Get Help here
+Jenkins Server Get Help here
+Implementation
+Login to Jenkins server and install sonarqube scanner.
+
+SonarQube scanner URL : https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner
+Package : https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.2.0.1227-linux.zip
+# wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.2.0.1227-linux.zip
+# unzip sonar-scanner-cli-3.2.0.1227-linux.zip
+# mv sonar-scanner-3.2.0.1227-linux /opt/sonar_scanner 
+Set SonarQube server details in sonar-scanner property file
+
+Sonar properties file: /opt/sonar_scanner/conf/sonar-scanner.properties
+sonar.host.url=http://<SONAR_SERVER_IP>:9000
+Login to Jenkins GUI console and install " SonarQube scanner" plugin
+
+Manage Jenkins > Manage Plugins > Avalable > SonarQube scanner
+Configure SonarQube scanner home path
+
+Manage Jenkins > Global Tool Configuration > SonarQube Scanner
+Name : sonar_scanner
+SONAR_RUNNER_HOME : /opt/sonar_scanner
+Configure SonarQube server name and authentication token
+
+Manage Jenkins > Configure Systems > SonarQube Servers
+Name : SonarQube
+ServerURL : http://<Sonarqube_server>:9000/sonar
+Server authentication token To Get Authentication code follow below steps. Login to SonarQube server as a admin My Account > Security > Generate Token
+Create a job to test SonarQube. Provide below sonar properties details in the job under build
+
+Build:
+Execute SonarQube Scanner > Analysis properties (it is mandatary).
+sonar.projectKey=Valaxy
+sonar.projectName=ValaxyDemo
+sonar.projectVersion=1.0
+sonar.sources=/var/lib/jenkins/workspace/$JOB_NAME/<PROJECT_NAME>/src
+Execute job to get analysis report.
+
+Next Step
+ Nexus Installation
+ 
+ 
+ 
+ Nexus Installation
+Nexus is one a artifact repository which helps to store your build outcomes.
+
+Follow this article in **Youtube
+Prerequisites
+EC2 instance with java
+Implementation steps
+Download and setup nexus stable version
+
+cd /opt
+wget https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-3.0.2-02-unix.tar.gz
+tar -zxvf  nexus-3.0.2-02-unix.tar.gz
+mv /opt/nexus-3.0.2-02 /opt/nexus
+As a good security practice, it is not advised to run nexus service as root. so create new user called nexus and grant sudo access to manage nexus services
+
+sudo adduser nexus
+# visudo \\ nexus   ALL=(ALL)       NOPASSWD: ALL
+sudo chown -R nexus:nexus /opt/nexus
+Open /opt/nexus/bin/nexus.rc file, uncomment run_as_user parameter and set it as following.
+
+vi /opt/nexus/bin/nexus.rc
+run_as_user="nexus" (file shold have only this line)
+Add nexus as a service at boot time
+
+sudo ln -s /opt/nexus/bin/nexus /etc/init.d/nexus
+Login as a nexus user and start service
+
+su - nexus
+service nexus start
+Login nexus server from browser on port 8081
+
+http://<Nexus_server>:8081
+
+Use default credentials to login
+
+username : admin
+password : admin123
+
+Troubleshooting
+service is not starting?
+
+make sure you are trying to start service with nexus user.
+check java installation
+Unable to access nexus URL?
+
+make sure port 8081 is opened in security group.
+Next Steps
+ Configure Users & Groups in Jenkins
+ Secure your Jenkins Server
+ Jenkins Plugin Installation
+ Jenkins Master-Slave Configuration
+ 
+ 
+ Install Jenkins on AWS EC2
+Jenkins is a self-contained Java-based program, ready to run out-of-the-box, with packages for Windows, Mac OS X and other Unix-like operating systems. As an extensible automation server, Jenkins can be used as a simple CI server or turned into the continuous delivery hub for any project.
+
+Follow this article in Youtube
+Prerequisites
+EC2 RHEL 7.x Instance Get help here
+With Internet Access
+Security Group with Port 8080 open for internet
+Java v1.8.x
+Install Java
+We will be using open java for our demo, Get latest version from http://openjdk.java.net/install/
+
+yum install java-1.8*
+#yum -y install java-1.8.0-openjdk
+Confirm Java Version
+Lets install java and set the java home
+
+java -version
+find /usr/lib/jvm/java-1.8* | head -n 3
+#JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64
+export JAVA_HOME
+PATH=$PATH:$JAVA_HOME
+# To set it permanently update your .bash_profile
+source ~/.bash_profile
+The output should be something like this,
+
+[root@~]# java -version
+openjdk version "1.8.0_151"
+OpenJDK Runtime Environment (build 1.8.0_151-b12)
+OpenJDK 64-Bit Server VM (build 25.151-b12, mixed mode)
+Install Jenkins
+You can install jenkins using the rpm or by setting up the repo. We will setup the repo so that we can update it easily in future. Get latest version of jenkins from https://pkg.jenkins.io/redhat-stable/
+
+yum -y install wget
+wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+yum -y install jenkins
+Start Jenkins
+# Start jenkins service
+systemctl start jenkins
+
+# Setup Jenkins to start at boot,
+systemctl enable jenkins
+Accessing Jenkins
+By default jenkins runs at port 8080, You can access jenkins at
+
+http://YOUR-SERVER-PUBLIC-IP:8080
+Configure Jenkins
+The default Username is admin
+Grab the default password
+Password Location:/var/lib/jenkins/secrets/initialAdminPassword
+Skip Plugin Installation; We can do it later
+Change admin password
+Admin > Configure > Password
+Configure java path
+Manage Jenkins > Global Tool Configuration > JDK
+Create another admin user id
+Test Jenkins Jobs
+Create “new item”
+Enter an item name – My-First-Project
+Chose Freestyle project
+Under Build section Execute shell : echo "Welcome to Jenkins Demo"
+Save your job
+Build job
+Check "console output"
+Next Step
+ Configure Users & Groups in Jenkins
+ Secure your Jenkins Server
+ Jenkins Plugin Installation
+ Jenkins Master-Slave Configuration
+ Setup Jenkins to run inside Tomcat Server
+ 
+ 
+ 
+ Ansible Installation
+Ansible is an open source automation platform. It is very, very simple to setup and yet powerful. Ansible can help you with configuration management, application deployment, task automation.
+
+Follow this in **YouTube
+Prerequisites
+An AWS EC2 instance
+Installation steps:
+Add a EPEL (Extra Packages for Enterprise Linux)third party repository to get packages for Ansible
+
+rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+Install Ansible
+
+yum install ansible -y 
+Check Ansible version
+
+ansible --version
+Create a new user for ansible administration & grant admin access to user (Master and Slave)
+
+useradd ansadmin
+passwd ansadmin
+# below command addes ansadmin to sudoers file. But strongly recommended to use "visudo" command if you are aware vi or nano editor. 
+echo "ansadmin ALL=(ALL) ALL" >> /etc/sudoers
+Using keybased authentication is advised. If you are still at learning stage use password based authentication (Master & Slave)
+
+# sed command replaces "PasswordAuthentication no to yes" without editing file 
+ sed -ie 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+Login as a ansadmin user on master and generate ssh key (Master)
+
+ssh-keygen
+Copy keys onto all ansible client nodes (Master)
+
+ssh-copy-id <target-server>
+Update target servers information on /etc/ansible/hosts file (Master)
+
+echo "<target server IP>" > /etc/ansible/hosts
+Run ansible command as ansadmin user it should be successful (Master)
+
+ansible all -m ping
+
+
+Installing Docker on Amazon Linux server
+1.Update packages
+
+yum update -y
+2.Install docker
+
+yum install docker -y
+Docker Installation on CentOS server
+Referance URL : https://docs.docker.com/install/linux/docker-ce/centos/#install-using-the-repository
+PREREQUISITES
+Please follow below steps to install docker CE on CentoOS server instance. For RedHat only Docker EE available
+
+1.Install required packages.
+
+sudo yum install -y yum-utils \
+  device-mapper-persistent-data \
+  lvm2
+  
+2.Use the following command to set up the stable repository.
+
+sudo yum-config-manager \
+   --add-repo \
+   https://download.docker.com/linux/centos/docker-ce.repo
+INSTALLING DOCKER CE
+1.Install the latest version of Docker CE.
+
+sudo yum install docker-ce
+If prompted to accept the GPG key, verify that the fingerprint matches 060A 61C5 1B55 8A7F 742B 77AA C52F EB6B 621E 9F35, and if so, accept it.
+
+2.Start Docker.
+
+sudo systemctl start docker
+3.Verify that docker is installed correctly by running the hello-world image.
+
+sudo docker run hello-world

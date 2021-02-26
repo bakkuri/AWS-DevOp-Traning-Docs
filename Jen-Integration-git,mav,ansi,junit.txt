@@ -1,0 +1,103 @@
+Ansible integration with Jenkins
+Follow this on YouTube
+
+Prerequisites:
+Ansible server Get Help Here
+Jenkins Server Get Help Here
+Part-01 Integration Setps
+Install "publish Over SSH"
+
+Manage Jenkins > Manage Plugins > Available > Publish over SSH
+Enable connection between Ansible and Jenkins
+
+Manage Jenkins > Configure System > Publish Over SSH > SSH Servers
+
+SSH Servers:
+Hostname:<ServerIP>
+username: ansadm
+password: *******
+Test the connection "Test Connection"
+
+
+Configure Git pulgin on Jenkins
+Git is one of the most popular tool for version contorl system. you can pull code from git repositories using jenkins if you use github plugin.
+
+Follow this artical in YouTube
+Prerequisites
+Jenkins server **Get Help Here
+Install Git on Jenkins server
+Install git packages on jenkins server
+
+  yum install git -y
+Setup maven on jenkins console
+Install maven plugin without restart
+
+Manage Jenkins > Jenkins Plugins > available > github
+Configure java path
+
+Manage Jenkins > Global Tool Configuration > git
+Next Steps
+ Configure Users & Groups in Jenkins
+ Secure your Jenkins Server
+ Jenkins Plugin Installation
+ Jenkins Master-Slave Configuration
+ 
+ 
+ 
+ Configure Junit pulgin on Jenkins
+Junit is one of the most popular unit testing tool for java. install plugin to start with this
+
+Follow this artical in YouTube
+Prerequisites
+Jenkins server **Get Help Here
+Setup maven on jenkins console
+Install maven plugin without restart
+Manage Jenkins > Jenkins Plugins > available > junit
+Next Steps
+ Configure Users & Groups in Jenkins
+ Secure your Jenkins Server
+ Jenkins Plugin Installation
+ Jenkins Master-Slave Configuration.
+ 
+ 
+ 
+ 
+ Install & configure Maven build tool on Jenkins
+Maven is a code build tool which used to convert your code to artifact. this is widely used plugin to build in continuous integration
+
+Follow this artical in YouTube
+Prerequisites
+Jenkins server **Get Help Here
+Install Maven on Jenkins
+Download maven packages https://maven.apache.org/download.cgi onto Jenkins server. In this case I am using /opt/maven as my installation directory - Link : https://maven.apache.org/download.cgi
+
+  # Creating maven directory under /opt
+  mkdir /opt/maven
+  cd /opt/maven
+  # downloading maven version 3.6.0
+  wget http://mirrors.fibergrid.in/apache/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.zip
+  unzip /opt/maven/apache-maven-3.6.0-bin.zip
+Setup M2_HOME and M2 paths in .bash_profile of user and add these to path variable
+
+  vi ~/.bash_profile
+  M2_HOME=/opt/maven/apache-maven-3.6.0
+  M2=$M2_HOME/bin
+  PAHT=<Existing_PATH>:$M2_HOME:$M2
+Check point
+logoff and login to check maven version Check maven version
+
+  mvn –version
+So far you have completed installation of maven software to support maven plugin on jenkins console. Let's jump onto jenkins to complete remining steps.
+
+Setup maven on jenkins console
+Install maven plugin without restart
+
+Manage Jenkins > Jenkins Plugins > available > Maven Invoker
+Configure java path
+
+Manage Jenkins > Global Tool Configuration > Maven
+Next Steps
+ Configure Users & Groups in Jenkins
+ Secure your Jenkins Server
+ Jenkins Plugin Installation
+ Jenkins Master-Slave Configuration

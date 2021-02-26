@@ -1,0 +1,634 @@
+Cloud Computing:
+---------------
+	instead of using local servers,use the group of remote servers to manage,store the application and process data through internet. 
+
+Types of cloud computing:
+------------------------
+	1)Public cloud
+	2)private cloud
+	3)hybrid cloud
+cloud service models:
+---------------------
+	1)IAAS (infrastructure as a service)
+	2)PAAS (platform as a service)
+	3)SAAS (software as a service)
+Advantages and Disadvantages of cloud:
+-------------------------------------
+Adv:	
+	1)lower software cost
+	2)improve performance
+	3)fewer maintance
+	4)instant software update
+	5)increased data safety
+dis:
+	1)must and should have reliable internet connection
+	2)requires a consistant internet connections
+	3)does not work in low speed connection
+
+AWS (Amazon Web Services):
+-------------------------
+ 	aws is a cloud computing service.
+
+Q)why should i learn aws?
+	->fastest growing cloud computing platform on planet.
+	->largst public cloud computing platform on planet.
+	->more organizations are outsorcing their it to aws.
+	->the aws certifications are most popular it certifications right now.
+
+Q)what you will need to learn aws?
+	->an aws free tier account
+		https://www.aws.amazon.com/free
+	->computer/laptop with ssh terminal
+	windows users need to install putty and putty keygen app (or) windows git terminal
+	
+Certifications of AWS:
+---------------------
+associate tier:
+--------------
+	1)certified sloution architect associate
+	2)certified developer associate
+	3)certified sysops administrator associate
+professional Tier:
+-----------------
+	1)certified sloution architect professional
+	2)devops professional
+speciality tier:
+---------------
+	1)security speciality
+	2)bigdata speciality
+	3)advance n/w speciality
+
+NOTE:
+----	You can see the exam bluprint in the aws.amazon.com
+
+Q)what do you know to pass the certified solution architect associate exam?
+
+1)aws global infrastructure
+2)security & identity
+3)management tools
+4)storage
+5)database
+6)compute
+7)network & content delivery
+8)messaging
+9)application services
+10)desktop & app streaming
+11)AI (artificial intelligance)
+12)business productivity
+13)IOT
+14)developer tools
+15)mobile services
+16)analytics
+17)migration
+18)game development
+
+1)aws global infrastructure:
+---------------------------
+	->these are physical machines where your aws is running
+they divided into 
+	->18 regions & 55 availabilty zones currently.
+	->region is a geographical area.each region consist of 2 (or more) availabilty zones.
+	->availability zone is datacenter.
+Q)what is edge location?
+	->edge locations are cdn (content delivery network's) end points for cloud front.
+	->there are many edge locations then regions. currently there are more than 66 edge locations.
+	->edge locatiosn are using for cache servers.
+
+2)security & identity:
+---------------------
+a)IAM(identity access management):
+---------------------------------	
+	every certification required.
+	password authentication,users,group,admin, it's like user management
+b)Inspector:
+-----------
+	inspect the vm.
+c)certificate manager:
+---------------------
+	it will give ssl cerificate.
+d)WAF(web aplication firewall):
+------------------------------
+	application level protection it gives.normal firewall give you network protection, waf gives application protection, it's stop sql injections.
+e)artifacts:
+-----------
+	it will gives documentation in aws console.
+
+3)Management tools:
+------------------
+a)cloud watch:
+-------------
+	to monitor vm. and monitor application
+b)cloud formation:
+-----------------
+	it is convert your infrastructure into code. it is a document describe the cloud environment.
+c)cloud trail:
+-------------
+	monitor your aws console. if you any changes in aws it will maintain user logs.
+d)opswork:
+---------
+	automatic deloying using chef.
+e)config:
+--------
+	it will manage configuration,if you break any configuration it will give warning. if you break any company policy it detects that and give warn.
+f)service catalog:
+-----------------
+	use for large enterprises.
+g)trusted advisor:
+-----------------
+	automatic scan your infrastructure and give you a advice
+
+4)storage:
+---------
+a)S3 (simple storage service):
+-----------------------------
+	->it is a virual disk in the cloud.
+	->we place the objects such as files,images.
+	->it is object based storage not install db,game
+b)Glacier:
+---------
+	->data archival storage service
+	->using for archive of files from s3
+	->you should wait 4 to 5 hours to get back the archive data
+	->it is very low cost
+c)EFS(elastic file service):
+---------------------------
+	it is file based storage and sharing files b/w multiple vm's.
+d)strorage gateway:
+------------------
+	storage gateway is the connect b/w s3 and your datacenter.
+
+5)database:
+----------
+a)RDS(relational database service):
+----------------------------------
+	it has deb servers such as mysql,plsql,orcle,mariadb,etc.
+b)Dynamodb:
+---------
+	it is non-relationsl db.
+c)Redshift:
+----------
+	use in data warehousing. we can do the such as reporing,bigdata.
+d)Elastic cache:
+---------------
+	it is maintain data cache. for fast performing
+
+6)compute:
+---------
+a)Ec2(elastic compute cloud):
+----------------------------
+	basically all ec2 are vm's in cloud.	
+b)Ec2 container service:
+-----------------------
+	it is a highly scalable container management service, that supports docker container.
+c)Elastic beanstalk:
+-------------------
+	this service is used to push the code into amazon cloud it will check the application
+	
+d)Lambda:
+--------
+	AWS Lambda is a serverless compute service that runs your code in response to events and automatically manages the underlying compute resources for you.
+e)Light sail:
+------------
+	for deploying wordppress ,joomla services and customized website.
+
+7)network & content delivery:
+----------------------------
+a)VPC(virual private cloud):
+---------------------------
+	it is your private datacenter in aws.
+b)route53:
+---------
+	amazon dns service
+c)cloud front:
+-------------
+	to deliver your content over the n/w.
+d)direct connect:
+----------------
+	it is directly connect to aws datacenter,to push data (or) download data.
+
+8)messaging:
+-----------
+a)SNS(simple notification service):
+----------------------------------
+	notification,email,text messages
+b)SQS(simple queue service):
+---------------------------
+	maintaion your application requests in the queue.
+c)SES(simple email service):
+---------------------------
+	sending and receiving emails.
+
+9)application services:
+----------------------
+a)step functions:
+----------------
+	it is visualize what is going in your aplication.
+b)SWF(simple work flow):
+-----------------------
+
+c)API gateway:
+-------------
+	it allows to monitor & secure we can access logic from backend.
+d)APP stream:
+------------
+	streaming desktop applications to users.
+e)elastic transcoder:
+--------------------
+	it will take care of device comatability such as tv,desktop,mobile.
+
+10)desktop & app streaming:
+--------------------------
+a)work spaces:
+--------------
+	Amazon WorkSpaces is Amazon's new fully managed cloud virtual desktop infrastructure (VDI) service.
+b)app stream 2.0:
+----------------
+	stream desktop application.
+
+11)AI (artificial intelligance):
+-------------------------------
+a)alexa:
+-------
+	it is a amazon voice service
+b)lex:
+c)polly:
+------
+	it text to voice service. covert text into .mp3 format
+d)Machine learning:
+------------------
+	it allows you to predict data based on previous performance.
+e)rekognition:
+-------------
+	if you upload a image it will tell what are in the image. face recognization also avaliabile to compare with db.
+
+12)business productivity:
+------------------------
+a)work docs:
+-----------	
+	to store your work documentation in cloud.
+b)workmail:
+----------
+	sending & receiving email.
+
+13)IOT (Internet of things):
+---------------------------
+
+14)developer tools:
+------------------
+a)code commit:
+-------------
+	same as github.
+b)code build:
+------------
+	to build code such as compile,test,...
+c)code deploy:
+-------------
+	deploy code into ec2 instance.
+d)code pipeline:
+---------------
+	keep trackable of code in different environment such as development,testing,production,...
+
+15)mobile services:
+------------------
+a)mobile hub:
+------------
+	for mobile development
+b)cognito:
+---------
+	easy to maintain signin & signup into your mobile application.
+c)device farm:
+-------------
+	you can test your mobile aplication in aws datacenter.
+d)mobile analytics:
+------------------
+	analysize your mobile app usage
+e)pinpoint:
+----------
+	when to deliver your notification & etc...
+
+16)analytics:
+------------
+a)anthena:
+--------- 
+	it allows run sql quaries in s3.
+b)EMR(elastic map register):
+---------------------------
+	process large amount of data,it might be login hours,indexing,financial markets,emr is used for bigdata.
+c)cloud search:
+--------------
+	it is uesd to increase search capabilities of website or application
+d)kinesis:
+---------
+	it is analysize realtime data. it can capture terabyrte of data like financial transactions, social media streams.
+e)data pipeline:
+---------------
+	for moving data from s3 in objects to RDS,dynamodb. you can setup data pipeline jobs.
+f)quick sight:
+-------------
+	it is a business analytics tool
+
+17)migration:
+------------
+a)snowball:
+----------
+	if you want imprort or export huge amount of disk use this service. for terabytes of data.
+b)DMS(database migration services):
+----------------------------------
+	it will migrate your database to cloud without downtime
+c)SMS(Server migration service):
+-------------------------------
+	it is same as DMS, but here we migrate our server to cloud
+
+18)game development:
+------------------- 
+	it is helpful for gaming application developing
+	
+	
+	IAM(Identity access management):
+--------------------------------
+	->it allows you to manage users and their level access to the aws console.
+	->it is important to understand IAM and how it works. both for the exam and administrating a company's aws account in real life.
+Q)what does IAM give you?
+	->centralized control of your aws account.
+	->shared access to your aws account.
+	->identity federaion (including active directory, connect to facebook, linkedin, etc..)
+	->Multi-Factor Authentication.
+	->provide temporary access for users/devices and services where necessary.
+	->allows you to setup your own password rotation policy.
+	->integrates with many different AWS services.
+Critical Terms:
+--------------
+users --> end users (people)
+groups --> collection of users under one set of permissions.
+roles --> similar to user,create roles and assign them to aws resources.
+policies --> a documennt that defines one (or more permissions).
+
+IAM LAB:
+--------
+->login to the console
+->pick the region.
+->services, click on IAM. (iam does not have a region it is available in globally)
+
+1)enable multi factor authentication
+	for mfa install google authenticator in android phone
+	scan the QR code and enter authenticaton number.
+2)a)create user
+	access type 
+		programmatic access
+		aws management console access
+ b)permission
+	create group
+	add policy
+ c)review
+ d)complete 
+
+NOTE: when you create a user access keyid & secret access keyid assigned.
+----
+
+Roles:-
+-----
+	create a role and assign some permission to them
+
+IAM Summery:
+-----------	
+	->root account is simply the account created when first setup your aws account. it has complete admin access
+	->new users have no permissions when first created.
+	->new users are assigned access keyid & secret access keyid when first created.
+	->these are not the same as password, and you cannot use the access keyid & secret access keyid to login to the console. you can use this           access aws via API's and command line however.
+	->you only get to view these once. if you lose them, you have to regenerate them. so save them in a secure location
+	->always setup MFA on your root account.
+	->you can create and customize your own password rotation polocies.
+	
+	
+	S3 (simple storage service):
+---------------------------
+Q)what is S3?
+	s3 stands for simple storage service, s3 provides to the developers and it teams with secure, durable, high-scalable object storage.
+	amazon s3 is easy to use with simple web service interface to store and retrive any amount of data from anywhere on the web.
+->s3 is a safe place to store your files. founder of dropbox help to amazon in a webpage interactive mode.
+->it is object based stored. objects are photos, videos, all text based files(pdf,xl,txt, etc..).
+->the data is spread across multiple devices.
+
+s3-Basics:
+---------
+->s3 is a object based storage service i.e allows you to upload files.
+->files can  be from 0bytes to 5TB.
+->there is unlimited storage.
+->files are stored in buckets.
+->s3 is universal name space, that is names must be unique globally.
+->if you create a bucket it has a dns name
+	eg:https://s3-eu-east-2.amazonaws.com/(bucket name)
+->when you upload a file to s3 you will receive a HTTP 200 code if the upload was successful.
+
+	s3 is simple key, value store
+->s3 is object based, object consist of the follwoing 
+	i)key (this is simply name of the object)
+	ii)value(this is simply the data what we upload)
+	iii)version ID (to maintain versions of the data)
+	iv)metadata (data about data what you are storing)
+	v)Access control list (who can access the list)
+
+->built for 99.99% availability for s3 platform.
+->amazon guarantee the 99.9% data availability.
+->amazon guarantee the 99.999999999% durability for s3 information.
+
+Data consistency model for s3:
+-----------------------------
+-> read after write consitency for puts of new objects
+->eventual consitency for overwrite puts and deletes (can take some time to propogate) (update)
+
+Q) what we learn in s3?
+	->Tired storage classes
+	->versioning
+	->Life cycle management
+	->s3 tranfer acceleration
+	->cross region replication
+	->security & encryption
+	->static website
+
+s3- storage tires/classes:
+-------------------------
+
+->s3 - Standard 99.99% availability , 99.999999999% durability stored redundanty across multiple devices in multiple facilities and is designed to sustain the loss of 2 facilities concurrently. 
+
+-> S3 - IA(infrequently access) for data that is accessed less frequently, but requires rapid access when needed. lower fee than s3 standard, but you are charged a retrived fee.
+->RRS (reduced redundancy storage) - design to provide 99.99% durability and 99.99% availiability of objects over a given year (very cheap)
+	eg: image in s3, thumbnail in rrs
+->glacier - very cheap to store the data, but used for archival only. it takes 3-5 hours to restore from glacier
+	(for retriving data in minutes,hours,days, you choose your service depends upon cost)
+
+Q)what is glacier?
+	glacier is an extremely low-cost storage service for data archival.amazon glacier stores data for as little as $0.01 per 1GB per 1 month, and is optimized for data that is infrequently accessed and for which retrival times of 3 to 5 hours suitable.
+
+S3-charges:
+----------
+	amazon charge for 
+	->storage
+	->requests
+	->storage management pricing (associative dveloper)
+	->data tranfer pricing (move one region to another)
+	->tranfer acceleration
+
+Q)how to create a bucket in s3?
+	go to aws management console->storage->s3
+	->s3 is in global region
+	->bucket name is unique
+	i)Name : technicaladda
+	 region:mumbai
+	ii)configure options
+	  a)versioning
+	  b)logging (who can log to bucket)
+	  c)tags (add key,value)
+	iii)set set permissions
+	iv)review
+	then you can upload your files. here you can set permissions,and properties
+->by default bucket is a private.
+->every bucket and object in bucket has overview, properties, permissions, management is their.
+->bucket properties has versionong, logging, website hosting, encryption, transfer accelaration, events, tags,
+->object properties has encryption, storage type, tags 
+
+S3 - Versioning Lab:
+--------------------
+ consloe->services->storage->s3->bucketname->properties->versioning
+->using this property we can mainatain the versions of the objects.
+->stores all versions of an object.
+->generate backup tool.
+->once enabled versioning cannot be diabled, only suspended
+->integrates with life cycle rules.
+
+S3 Transfer acceleration:
+-------------------------
+ 	s3 transfer acceleration utilises the cloud front edge n/w to accelarate your uploads to s3. instead of directly uploading to your s3 bucket,
+you can use a distinct url to upload directly to an edge location which will then transfer that file to s3. 
+
+	->s3->bucket->properties->transfer acceleration
+	we will get a distint url
+Q)what is cdn?
+	cdn means content delivery n/w is a system of distributed servers. that deliver webpages and other web content to a user based on the geographic locations of the user.
+ 
+here different terminology 
+i)edge location: cache location seperate to aws regions.
+ii)origin : where your content stored.
+iii)distribution : colection of edge locations to distribute data.
+
+ Learn briefly about CDN in cloud front topic
+
+S3 static website hosting:
+-------------------------
+	static website means which will not change with time.
+	we can create a static website using this property in s3.
+	->s3->bucket->properties->static website hosting
+
+use this bucket we can host a website
+	index.html
+		------------->make the files are public
+	error.html 
+URL: <bucketname>.s3-website.<region>.amazon.aws.com
+
+s3 - security & encryption:
+---------------------------
+->by default all newly created buckets are private.
+->you can setup access control list to your bucket using
+	i)bucket policies
+	ii)access control list
+->s3 buckets can be configured to create access logs which log all requests made to the s3 bucket. this can be done to another
+
+encryption:
+-----------
+	in transit: when you uploaded the from your local machine to aws data is encrypted (ssl/tls)
+	----------
+	
+	at rest:
+	--------
+	i)server side
+		a)s3 managed 
+			keys-SSE-S3
+		b)aws key management service  
+			keys-SSE-KMS
+		c)server side encryption with customer provided 
+			keys-SSE-C
+	
+	ii)client side:
+		you can encrypt the data and upload to s3
+
+Cross-Region replication:
+------------------------
+	if you want move bucket data from one region to another region use the replication method.
+	eg:bucket1 (mumbai)
+	   bucket2 (London)
+	from mumbai to london
+	    source  to destinaion
+	->s3->bucket->management->cross-region replication
+->you need to enable the versioning of the bucket.
+->under bucket management replication is their 
+->here objects are copied not objects permissions.
+->versioning must be enabled on both sides source and destination buckets.
+->regions must be unique.
+->files in an existing bucket are not not replicated automatically, all subsequent updated files will be replicated automatically.
+->you can not replicate to multiple buckets.
+->delete objects are replicated.
+->delete individual versions or delete markers will not be replicated.
+->understand what cross region replication is at high level. 
+->you can copy the content of the bucket through aws command line.
+
+->create a user with full s3 access.
+in command line
+	aws configure
+	aws accesskey id:
+	aws secret accesskey :
+	default region name:
+	default-output format:
+let's check bucket list
+	aws s3 ls
+->to copy of one bucket to another bucket 
+	aws s3 cp --recursive s3://technicaladda77	s3://londontechnicaladda
+
+Life cycle management:
+---------------------
+	life cycle means we can move an object from place to another such as standard to IA to Glacier then expire
+ ->s3->bucket->management->lifecycle
+->enable the life cycle.
+->can be applied to current versions and previous versions.
+->following actions can be done
+	a)transition to the standard - IA storage class
+		30 days after creation don
+	b)archive to the glacier storage class
+		30 days after IA
+	c)permanently delete
+
+Storage Gateways:
+----------------
+->aws storage gateway is a service that connects an on-premises software appliance with cloud based storage to provide seamless and secure integration b/w an organizations. this service enables you to securely store data to the aws cloud for scalable and cost-effective storage.
+
+->aws storage gateway's software appliance is available for download as a vm that you install on a host in your datacenter. storage gateway supports either vmware esxi or microsoft hyper-v. once you have installed in your gateway and associated it with your aws account through the activation process, you can use the aws management console to create the storage gateway option that is right for you.
+
+gateway types:
+--------------
+	i)file gateway (NFS)
+		text based, videos, picture
+	ii)volume gateway
+		  block storage,vm,os
+		a)stored volumes (entire blocked)
+		b)cached volumes (recently activity store)
+	iii)virtual tape gateway (VTL)
+		for archival
+Note: we can attach these gateways as iscsi devices from your on-premises application server.
+
+i)file gateway:
+---------------
+ files are stored as objects in your s3 buckets. ownership, permissions, and time stamps are durably stored in s3 in the user meta data of the objects associated with the file. once objects are transfered to s3 they can be managed by s3.
+
+ii)volume gateway:
+-----------------
+ to store block based data use this gateway.
+	a)stored vloumes:
+	-----------------
+		we can store entire os in aws s3 in the form ebs. so we can use this gateway we can store to aws
+	b)cached volumes:
+	-----------------
+		store frequently accessed data. it is cached here.
+iii)virtual tape gateway:
+-------------------------
+	to upload archival dat to to aws.
+	
+	
